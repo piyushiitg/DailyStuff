@@ -1,0 +1,168 @@
+
+# Excerpts from file Process.py
+ __author__ = 'Your name'
+__email__ = "Your email"
+
+import subprocess
+
+class Process:
+    """
+    Process module that abstracts subprocess library functions for easy use with a process status object.
+    """    
+    def launch(self, status):
+        """Launch the process from status.
+
+        Args:
+            status: ProcessStatus that has the command to run.
+
+        Returns:
+            None.
+
+        Raises:
+            Exception: if status is None.
+        """        status.process = subprocess.Popen(status.command.split(' '))
+        status.started(status.process.pid)
+        
+    def kill(self, status):
+        """Launch the process from status.
+
+        Args:
+            status: process status that has the command to run.
+
+        Returns:
+            None.
+
+        Raises:
+            Exception: if status is None.
+        """        status.process.kill()
+        status.killed()
+        
+    def terminate(self, status):
+        """
+        Terminate the running process from status.
+        
+        Args:
+            status: ProcessStatus that has process pid to kill.
+
+        Returns:
+            None.
+
+        Raises:
+            Exception: if process has not started yet.
+        """        status.process.terminate()
+        status.killed()
+
+    def waitToFinish(self, status):
+        """
+        Wait for the process to finish and return exit code.
+
+        Args:
+            status: ProcessStatus that has the reference to the process pipe.
+
+        Returns:
+            None.
+
+        Raises:
+            Exception: if process has finished already or has not started yet.
+        """        status.finished(status.process.wait())
+
+
+How does one find the document?
+
+One can use the dir() function in python to find variables and functions of a class. But we shall run help on a class to find out its document. Some examples are below (outputs are bold, input commands are not):
+ 
+Python 2.7.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from Process import Process
+>>> dir (Process)
+['__doc__', '__module__', 'check', 'kill', 'launch', 'terminate', 'waitToFinish']
+>>> help (Process)
+Help on class Process in module Process:
+
+class Process
+ |  Process module that abstracts subprocess library functions for easy use with a process status object.
+ |
+ |  Methods defined here:
+ |
+ |  check(self, status)
+ |      Check status of the process.
+ |
+ |      Args:
+ |          status: ProcessStatus that has the process pipe.
+ |
+ |      Returns:
+ |          None.
+ |
+ |      Raises:
+ |          Exception: if process has not started yet.
+ |
+ |  kill(self, status)
+ |      Launch the process from status.
+ |
+ |      Args:
+ |          status: process status that has the command to run.
+ |
+ |      Returns:
+ |          None.
+ |
+ |      Raises:
+ |          Exception: if status is None.
+ |
+ |  launch(self, status)
+ |      Launch the process from status.
+ |
+ |      Args:
+ |          status: ProcessStatus that has the command to run.
+ |
+ |      Returns:
+ |          None.
+ |
+ |      Raises:
+ |          Exception: if status is None.
+ |
+ |  terminate(self, status)
+ |      Terminate the running process from status.
+ |
+ |      Args:
+ |          status: ProcessStatus that has process pid to kill.
+ |
+ |      Returns:
+ |          None.
+ |
+ |      Raises:
+ |          Exception: if process has not started yet.
+ |
+ |  waitToFinish(self, status)
+ |      Wait for the process to finish and return exit code.
+ |
+ |      Args:
+ |          status: ProcessStatus that has the reference to the process pipe.
+ |
+ |      Returns:
+ |          None.
+ |
+ |      Raises:
+ |          Exception: if process has finished already or has not started yet.>>> help (Process.launch)
+Help on method launch in module Process:
+
+launch(self, status) unbound Process.Process method
+    Launch the process from status.
+
+    Args:
+        status: ProcessStatus that has the command to run.
+
+    Returns:
+        None.
+
+    Raises:
+        Exception: if status is None.
+>>>
+
+How do we generate the HTML documents?
+
+While this command line output is very helpful in using the module/class on the fly, an HTML document cross-linked with source code helps in re-development and bug-fixing because it makes reading and finding code in a very easy manner.
+
+To generate an HTML document from python source codes like the one we produced, we can use a third party tool like epydoc. Download the software from epydoc.sourceforge.net, install it, and run the python tool named epydoc.pyw from your python-dir/Scripts.
+
+Click browse and add the Process.py file (actually, add every python file this way). Then click "Start" and it will generate a set of HTML files for you, all nice and cross-linked. You can save the project as a .prj file to open and run later when you have modified the PythoDoc in .py files.
+
